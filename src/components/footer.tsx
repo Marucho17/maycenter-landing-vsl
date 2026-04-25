@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { trackFooterClick } from "@/lib/analytics";
 
 const LOGO_URL =
@@ -14,11 +15,26 @@ const quickLinks = [
 ];
 
 export function Footer() {
+  const reduceMotion = useReducedMotion();
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
   return (
     <footer className="bg-black text-white pt-12 sm:pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-12 mb-8 sm:mb-12">
-          <div className="sm:col-span-2 md:col-span-1">
+        <motion.div
+          initial={reduceMotion ? "show" : "hidden"}
+          whileInView="show"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ staggerChildren: 0.1 }}
+          className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-12 mb-8 sm:mb-12"
+        >
+          <motion.div
+            variants={fadeUp}
+            transition={{ duration: 0.5 }}
+            className="sm:col-span-2 md:col-span-1"
+          >
             <Image
               src={LOGO_URL}
               alt="MAYCENTER Odontología"
@@ -31,9 +47,9 @@ export function Footer() {
               Odontología de excelencia con tecnología de vanguardia. Tu
               sonrisa en las mejores manos desde hace más de 10 años.
             </p>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
             <h4 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">
               Enlaces Rápidos
             </h4>
@@ -49,9 +65,9 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={fadeUp} transition={{ duration: 0.5 }}>
             <h4 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">
               Contacto
             </h4>
@@ -139,15 +155,21 @@ export function Footer() {
                 </svg>
               </a>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="border-t border-white/10 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-gray-500">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="border-t border-white/10 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-gray-500"
+        >
           <p>
             &copy; {new Date().getFullYear()} MAYCENTER Odontología. Todos los
             derechos reservados.
           </p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );
